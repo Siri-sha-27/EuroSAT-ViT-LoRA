@@ -1,4 +1,12 @@
-#  Parameter-Efficient Fine-Tuning of Vision Transformers on EuroSAT Using LoRA  
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10-blue" />
+  <img src="https://img.shields.io/badge/PyTorch-2.x-red" />
+  <img src="https://img.shields.io/badge/Transformers-4.44+-orange" />
+  <img src="https://img.shields.io/badge/LoRA-PEFT-green" />
+  <img src="https://img.shields.io/badge/Model-ViT--Base--Patch16--224-yellow" />
+  <img src="https://img.shields.io/badge/License-MIT-success" />
+</p>
+#  🌍  Parameter-Efficient Fine-Tuning of Vision Transformers on EuroSAT Using LoRA  
 ### A Complete Study of Accuracy, Efficiency, and Practical Deployment
 
 This project investigates **Parameter-Efficient Fine-Tuning (PEFT)** for **Vision Transformers (ViTs)** using **Low-Rank Adaptation (LoRA)**.  
