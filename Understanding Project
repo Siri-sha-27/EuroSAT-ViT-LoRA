@@ -1,0 +1,68 @@
+A. Overall Pipeline Diagram
+                 +-----------------------+
+                 |  Pretrained ViT-Base  |
+                 | (ImageNet-1k Weights) |
+                 +-----------+-----------+
+                             |
+                             v
+      +---------------------------------------------+
+      |         Two Fine-Tuning Approaches          |
+      +---------------------------------------------+
+      |                                             |
+      |  1) Full Fine-Tuning       2) LoRA Fine-Tuning      |
+      |     - All 85M params          - ViT frozen          |
+      |     - High compute            - Adds low-rank A,B   |
+      |     - Large memory            - ~442k params train  |
+      +---------------------------------------------+
+                             |
+                             v
+                 +-----------------------+
+                 |  EuroSAT RGB Dataset |
+                 |   (10 Land Classes)  |
+                 +-----------+-----------+
+                             |
+                             v
+               +---------------------------+
+               | Training + Evaluation     |
+               | - Accuracy                |
+               | - Params                  |
+               | - Confusion Matrix        |
+               | - Training Curves         |
+               +------------+--------------+
+                             |
+                             v
+              +--------------------------------+
+              |   Gradio Real-Time Classifier  |
+              |  Upload → Predict Land Class    |
+              +--------------------------------+
+
+B. LoRA inside Attention Diagram
+            Original Attention Projection (e.g., Query)
+                     W_q ∈ R^(d_model × d_model)
+                             |
+                             v
+                +-------------------------+
+                |  LoRA Modification      |
+                +-------------------------+
+                         |
+                         v
+                W_q' = W_q + (B @ A)
+                
+                A ∈ R^(r × d_model)   # down projection (trainable)
+                B ∈ R^(d_model × r)   # up projection (trainable)
+                r << d_model (rank=8)
+
+C. Training Comparison Diagram
+           FULL FINE-TUNING                    LoRA
+    +---------------------------+     +---------------------------+
+    | Train ALL parameters      |     | Train ONLY LoRA adapters |
+    | ~85,806,346 params        |     | ~442,368 params          |
+    | High memory & compute     |     | Low memory & compute     |
+    +---------------------------+     +---------------------------+
+                     \                     /
+                      \                   /
+                       \                 /
+                        +---------------+
+                        |  Similar Accuracy |
+                        |    (~98%)         |
+                        +------------------+
